@@ -1,48 +1,48 @@
 <!doctype html>
-<html lang="ru">
+<html lang="uk">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Quote Collection</title>
+  <title>Колекція цитат</title>
   <link rel="stylesheet" href="/static/style.css">
   <script src="/static/app.js" defer></script>
 </head>
 <body>
   <main>
     <header>
-      <span class="eyebrow">ЛИЧНАЯ КОЛЛЕКЦИЯ</span>
-      <h1>Слова, которые хочется сохранить.</h1>
-      <p>Собирайте цитаты и возвращайтесь к любимым мыслям.</p>
+      <span class="eyebrow">ОСОБИСТА КОЛЕКЦІЯ</span>
+      <h1>Слова, які хочеться зберегти.</h1>
+      <p>Збирайте цитати й повертайтеся до улюблених думок.</p>
     </header>
     <div class="layout">
       <section class="editor" aria-labelledby="form-title">
-        <h2 id="form-title">Добавить цитату</h2>
+        <h2 id="form-title">Додати цитату</h2>
         <form id="quote-form">
           <label for="text">Цитата <span aria-hidden="true">*</span></label>
-          <textarea id="text" required maxlength="5000" rows="6" placeholder="Мысль, которую стоит запомнить…"></textarea>
+          <textarea id="text" required maxlength="5000" rows="6" placeholder="Думка, яку варто запам’ятати…"></textarea>
           <label for="author">Автор</label>
-          <input id="author" maxlength="200" placeholder="Можно оставить пустым">
-          <label for="category">Категория</label>
-          <input id="category" maxlength="100" list="category-options" placeholder="Например, вдохновение">
+          <input id="author" maxlength="200" placeholder="Можна залишити порожнім">
+          <label for="category">Категорія</label>
+          <input id="category" maxlength="100" list="category-options" placeholder="Наприклад, натхнення">
           <datalist id="category-options"></datalist>
           <div class="actions">
-            <button type="submit" id="save">Сохранить</button>
-            <button type="button" id="cancel" class="secondary" hidden>Отменить</button>
+            <button type="submit" id="save">Зберегти</button>
+            <button type="button" id="cancel" class="secondary" hidden>Скасувати</button>
           </div>
         </form>
       </section>
-      <section aria-label="Коллекция цитат">
+      <section aria-label="Колекція цитат">
         <form id="filters" class="filters" role="search">
-          <label class="sr-only" for="search">Поиск по тексту или автору</label>
-          <input id="search" type="search" maxlength="200" placeholder="Текст цитаты или автор">
-          <label class="sr-only" for="filter-category">Категория</label>
-          <select id="filter-category"><option value="">Все категории</option></select>
-          <button type="submit" class="secondary">Найти</button>
+          <label class="sr-only" for="search">Пошук за текстом або автором</label>
+          <input id="search" type="search" maxlength="200" placeholder="Текст цитати або автор">
+          <label class="sr-only" for="filter-category">Категорія</label>
+          <select id="filter-category"><option value="">Усі категорії</option></select>
+          <button type="submit" class="secondary">Знайти</button>
         </form>
-        <div class="collection-heading"><h2>Моя коллекция</h2><button type="button" id="random" class="secondary">Случайная цитата</button></div>
+        <div class="collection-heading"><h2>Моя колекція</h2><button type="button" id="random" class="secondary">Випадкова цитата</button></div>
         <p id="message" role="status" aria-live="polite"></p>
         <div id="quotes" aria-live="polite"></div>
-        <button type="button" id="more" class="secondary" hidden>Показать ещё</button>
+        <button type="button" id="more" class="secondary" hidden>Показати ще</button>
       </section>
     </div>
   </main>

@@ -13,11 +13,13 @@ async function api(path, options = {}) {
   const response = await fetch(path, {
     ...options,
     headers: { "Content-Type": "application/json", ...options.headers },
+  }).catch(() => {
+    throw new Error("Не вдалося з’єднатися із сервером. Перевірте підключення та спробуйте ще раз.");
   });
   if (!response.ok) {
-    if (response.status === 422) throw new Error("Проверьте поля: цитата не должна быть пустой или слишком длинной.");
-    if (response.status === 404) throw new Error("Цитата не найдена. Обновите список или измените фильтры.");
-    throw new Error("Не удалось выполнить запрос. Попробуйте ещё раз.");
+    if (response.status === 422) throw new Error("Перевірте поля: цитата не має бути порожньою або надто довгою.");
+    if (response.status === 404) throw new Error("Цитату не знайдено. Оновіть список або змініть фільтри.");
+    throw new Error("Не вдалося виконати запит. Спробуйте ще раз.");
   }
   return response.status === 204 ? null : response.json();
 }
@@ -29,7 +31,7 @@ function filters() {
 function resetForm() {
   editingId = null;
   $("quote-form").reset();
-  $("form-title").textContent = "Добавить цитату";
+  $("form-title").textContent = "Додати цитату";
   $("cancel").hidden = true;
 }
 
@@ -40,7 +42,7 @@ function renderQuote(quote) {
   body.textContent = quote.text;
   const author = document.createElement("p");
   author.className = "byline";
-  author.textContent = quote.author || "Неизвестный автор";
+  author.textContent = quote.author || "Невідомий автор";
   card.append(body, author);
   if (quote.category) {
     const tag = document.createElement("span");
@@ -52,25 +54,25 @@ function renderQuote(quote) {
   actions.className = "actions";
   const edit = document.createElement("button");
   edit.className = "secondary";
-  edit.textContent = "Изменить";
+  edit.textContent = "Редагувати";
   edit.onclick = () => {
     editingId = quote.id;
     for (const key of ["text", "author", "category"]) $(key).value = quote[key];
-    $("form-title").textContent = "Изменить цитату";
+    $("form-title").textContent = "Редагувати цитату";
     $("cancel").hidden = false;
     $("text").focus();
   };
   const remove = document.createElement("button");
   remove.className = "secondary danger";
-  remove.textContent = "Удалить";
+  remove.textContent = "Видалити";
   remove.onclick = async () => {
-    if (!confirm("Удалить эту цитату?")) return;
+    if (!confirm("Видалити цю цитату?")) return;
     remove.disabled = true;
     try {
       await api(`/api/quotes/${quote.id}`, { method: "DELETE" });
       if (editingId === quote.id) resetForm();
       await refresh();
-      message("Цитата удалена.");
+      message("Цитату видалено.");
     } catch (error) { message(error.message, true); }
     finally { remove.disabled = false; }
   };
@@ -90,14 +92,14 @@ async function loadQuotes(append = false) {
   quotes.forEach((quote) => $("quotes").append(renderQuote(quote)));
   offset += quotes.length;
   $("more").hidden = quotes.length < pageSize;
-  message(offset ? `Показано цитат: ${offset}` : "Пока ничего нет. Добавьте цитату или измените фильтры.");
+  message(offset ? `Показано цитат: ${offset}` : "Поки що нічого немає. Додайте цитату або змініть фільтри.");
 }
 
 async function loadCategories() {
   const selected = $("filter-category").value;
   const categories = await api("/api/categories");
   $("category-options").replaceChildren();
-  $("filter-category").replaceChildren(new Option("Все категории", ""));
+  $("filter-category").replaceChildren(new Option("Усі категорії", ""));
   categories.forEach((category) => {
     $("category-options").append(new Option(category, category));
     $("filter-category").append(new Option(category, category));
@@ -112,7 +114,7 @@ async function refresh() { await loadCategories(); await loadQuotes(); }
 $("quote-form").onsubmit = async (event) => {
   event.preventDefault();
   const payload = Object.fromEntries(["text", "author", "category"].map((key) => [key, $(key).value.trim()]));
-  if (!payload.text) { message("Введите текст цитаты.", true); return; }
+  if (!payload.text) { message("Введіть текст цитати.", true); return; }
   $("save").disabled = true;
   try {
     await api(editingId === null ? "/api/quotes" : `/api/quotes/${editingId}`, {
@@ -120,7 +122,7 @@ $("quote-form").onsubmit = async (event) => {
     });
     resetForm();
     await refresh();
-    message("Цитата сохранена. Если её не видно, проверьте фильтры.");
+    message("Цитату збережено. Якщо її не видно, перевірте фільтри.");
   } catch (error) { message(error.message, true); }
   finally { $("save").disabled = false; }
 };
@@ -139,7 +141,7 @@ $("random").onclick = async () => {
     if (request !== listRequest) return;
     $("quotes").replaceChildren(renderQuote(quote));
     $("more").hidden = true;
-    message("Случайная цитата из выбранной подборки. Нажмите «Найти», чтобы вернуться к списку.");
+    message("Випадкова цитата з вибраної добірки. Натисніть «Знайти», щоб повернутися до списку.");
   } catch (error) { if (request === listRequest) message(error.message, true); }
 };
 refresh().catch((error) => message(error.message, true));

@@ -122,7 +122,7 @@ class ApiTests(unittest.TestCase):
         self.assertEqual(self.request("/api/quotes/999999", "DELETE")[0], 404)
         self.assertEqual(self.request("/health"), (200, {"status": "ok"}))
         with urlopen(self.base) as response:
-            self.assertIn(b"Quote Collection", response.read())
+            self.assertIn("<title>Колекція цитат</title>".encode("utf-8"), response.read())
         with urlopen(self.base + "/static/app.js") as response:
             self.assertEqual(response.status, 200)
 
