@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Quote Collection</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <script src="/static/app.js" defer></script>
+</head>
+<body>
+  <main>
+    <header>
+      <span class="eyebrow">ЛИЧНАЯ КОЛЛЕКЦИЯ</span>
+      <h1>Слова, которые хочется сохранить.</h1>
+      <p>Собирайте цитаты и возвращайтесь к любимым мыслям.</p>
+    </header>
+    <div class="layout">
+      <section class="editor" aria-labelledby="form-title">
+        <h2 id="form-title">Добавить цитату</h2>
+        <form id="quote-form">
+          <label for="text">Цитата <span aria-hidden="true">*</span></label>
+          <textarea id="text" required maxlength="5000" rows="6" placeholder="Мысль, которую стоит запомнить…"></textarea>
+          <label for="author">Автор</label>
+          <input id="author" maxlength="200" placeholder="Можно оставить пустым">
+          <label for="category">Категория</label>
+          <input id="category" maxlength="100" list="category-options" placeholder="Например, вдохновение">
+          <datalist id="category-options"></datalist>
+          <div class="actions">
+            <button type="submit" id="save">Сохранить</button>
+            <button type="button" id="cancel" class="secondary" hidden>Отменить</button>
+          </div>
+        </form>
+      </section>
+      <section aria-label="Коллекция цитат">
+        <form id="filters" class="filters" role="search">
+          <label class="sr-only" for="search">Поиск по тексту или автору</label>
+          <input id="search" type="search" maxlength="200" placeholder="Текст цитаты или автор">
+          <label class="sr-only" for="filter-category">Категория</label>
+          <select id="filter-category"><option value="">Все категории</option></select>
+          <button type="submit" class="secondary">Найти</button>
+        </form>
+        <div class="collection-heading"><h2>Моя коллекция</h2><button type="button" id="random" class="secondary">Случайная цитата</button></div>
+        <p id="message" role="status" aria-live="polite"></p>
+        <div id="quotes" aria-live="polite"></div>
+        <button type="button" id="more" class="secondary" hidden>Показать ещё</button>
+      </section>
+    </div>
+  </main>
+</body>
+</html>
